@@ -20,7 +20,7 @@ def template_route2(req):
   data = {'count': 1, 'files': ['msg1.html', 'msg2.html', 'msg3.html']}
   return render_to_response('index3.html', data, request=req)
 
-''' Main Application '''
+''' Make Application '''
 def make_app() :
   with Configurator() as config:
 
@@ -46,19 +46,24 @@ def make_app() :
     config.add_static_view(name='/', path='./public', cache_max_age=3600)
 
     # create the webserver config
-    return config.make_wsgi_app()
+    app = config.make_wsgi_app()
+  return app
 
-def main(app) :
+''' Main Application '''
+def main() :
+  app = make_app()
   # run the server
   server = make_server('127.0.0.1', 8080, app)
   print("The server is now running on: http://127.0.0.1:8080")
-  
+
   try:
     server.serve_forever()
   except KeyboardInterrupt:
     print("\nExiting...")
     exit(0)
 
-application = make_app()
+''' Run Application or Server '''
 if __name__ == '__main__':
-  main(application)
+  main()
+else :
+  application = make_app()
